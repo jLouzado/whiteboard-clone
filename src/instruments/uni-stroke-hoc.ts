@@ -15,6 +15,8 @@ export class SingleStroke implements Instrument {
     const img = new Image()
     img.src = this.prevImg
     const context = this.canvas.getContext('2d')
+    // TODO: move to child
+    context?.save()
     img.onload = () => {
       // clear canvas
       context?.clearRect(0, 0, this.canvas.width, this.canvas.height)
@@ -26,6 +28,8 @@ export class SingleStroke implements Instrument {
   }
 
   drawEnd(e: MouseEvent) {
+    const context = this.canvas.getContext('2d')
+    context?.restore()
     this.im.drawEnd(e)
   }
 
