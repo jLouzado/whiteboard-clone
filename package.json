@@ -7,7 +7,9 @@
     "start": "parcel index.html --open",
     "build": "parcel build index.html",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "pretty": "yarn prettier --config .prettierrc --write '**/*.(ts|json|md)'",
+    "pretty:check": "yarn prettier --config .prettierrc --check '**/*.(ts|json|md)'"
   },
   "dependencies": {
     "snabbdom": "^2.0.0",
@@ -22,6 +24,7 @@
     "jest": "^26.4.2",
     "jest-canvas-mock": "^2.2.0",
     "parcel-bundler": "^1.6.1",
+    "prettier": "^2.1.1",
     "sinon": "^9.0.3",
     "ts-jest": "^26.3.0",
     "typescript": "^4.0.2"
