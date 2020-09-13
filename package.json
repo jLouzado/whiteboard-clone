@@ -1,18 +1,44 @@
 {
-    "name": "whiteboard-clone",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.html",
-    "scripts": {
-        "start": "parcel index.html --open",
-        "build": "parcel build index.html"
+  "name": "whiteboard-clone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "start": "parcel index.html --open",
+    "build": "parcel build index.html",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {
+    "snabbdom": "^2.0.0",
+    "tslib": "^2.0.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.12",
+    "@types/jest": "^26.0.13",
+    "chai": "^4.2.0",
+    "jest": "^26.4.2",
+    "jest-canvas-mock": "^2.2.0",
+    "parcel-bundler": "^1.6.1",
+    "ts-jest": "^26.3.0",
+    "typescript": "^4.0.2"
+  },
+  "keywords": [],
+  "jest": {
+    "preset": "ts-jest",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "setupFiles": [
+      "jest-canvas-mock"
+    ],
+    "moduleNameMapper": {
+      ".+\\.css$": "<rootDir>/src/styleMock.ts"
     },
-    "dependencies": {
-        "tslib": "^2.0.1"
-    },
-    "devDependencies": {
-        "parcel-bundler": "^1.6.1",
-        "typescript": "^4.0.2"
-    },
-    "keywords": []
+    "testMatch": [
+      "**/*.(test|spec).(ts|tsx|js)"
+    ]
+  }
 }
