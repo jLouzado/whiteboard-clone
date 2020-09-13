@@ -1,7 +1,7 @@
 import {Instrument, Options} from './base'
 
 export class Highlighter implements Instrument {
-  ctx
+  private ctx
 
   constructor(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx
@@ -19,7 +19,6 @@ export class Highlighter implements Instrument {
 
   draw(e: MouseEvent, options: Options) {
     this.ctx.globalCompositeOperation = 'multiply'
-    this.ctx.globalAlpha = 0.5
     this.ctx.lineCap = 'round'
     this.ctx.lineJoin = 'round'
     this.ctx.lineWidth = options.width

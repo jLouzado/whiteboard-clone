@@ -1,61 +1,35 @@
 import {Instrument, Options} from './base'
 
-export class SingleStroke extends Instrument {
-  im
-  canvas
-  stack: Array<string> | undefined
+export class SingleStroke implements Instrument {
+  private im
+  private canvas
+  private prevImg
 
   constructor(canvas: HTMLCanvasElement, im: Instrument) {
-    const context = canvas.getContext('2d')
-    if (context) {
-      super(context)
-      this.im = im
-      this.canvas = canvas
-      this.ctx = canvas.getContext('2d')
-      this.stack = []
-
-      this.save()
-    }
-  }
-
-  private save() {
-    if (this.canvas && this.stack) {
-      const content = this.canvas.toDataURL()
-      console.log('push', this.stack.push(content))
-    } else console.log('Canvas and/or stack not found')
+    this.im = im
+    this.canvas = canvas
+    this.prevImg = canvas.toDataURL()
   }
 
   drawStart(e: MouseEvent, options: Options) {
-    // TODO: why isn't this happening in the child?
-    this.ctx?.save()
-
-    if (this.stack) {
-      const img = new Image()
-      const content = this.stack.pop()
-      console.log('pop', this.stack.length)
-      if (content) {
-        img.src = content
-        img.onload = () => {
-          console.log('redrawing')
-          if (this.ctx) {
-            console.log('not null')
-            this.ctx.drawImage(img, 0, 0)
-          }
-
-          console.log('starting')
-          this.save()
-          this.im?.drawStart(e, options)
-        }
-      }
-    } else console.log('stack not found')
+    const img = new Image()
+    img.src = this.prevImg
+    const context = this.canvas.getContext('2d')
+    img.onload = () => {
+      // clear canvas
+      context?.clearRect(0, 0, this.canvas.width, this.canvas.height)
+      // redraw without last stroke
+      context?.drawImage(img, 0, 0)
+      // start new stroke
+      this.im.drawStart(e, options)
+    }
   }
 
   drawEnd(e: MouseEvent) {
-    this.ctx?.restore()
-    this.im?.drawEnd(e)
+    this.im.drawEnd(e)
   }
 
   draw(e: MouseEvent, options: Options) {
-    this.im?.draw(e, options)
+    this.im.draw(e, options)
   }
 }
