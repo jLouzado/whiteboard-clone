@@ -18,10 +18,9 @@ window.onload = () => {
   if (context && app) {
     let state: WBState = initApp(context, canvas)
 
-    /** Receives actions from DOM and updates state for tools */
+    /** Receives actions from DOM and updates state */
     const dispatch = (reducer: Reducer<WBState>) => (e: Event) => {
       state = reducer(e, state)
-      console.log(state.width, state.color)
       app = patch(app, view(dispatch, state))
     }
 
