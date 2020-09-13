@@ -45,6 +45,21 @@ describe('reducers', () => {
 
         assert.deepEqual(actual.instrument, expected)
       })
+      it('should set width to small', () => {
+        const context = document
+          .createElement('canvas')
+          .getContext('2d') as CanvasRenderingContext2D
+        const state = {
+          ...initApp(context),
+          instrument: new Highlighter(context),
+          width: WIDTH.MEDIUM
+        }
+
+        const actual = changeInstrument('Pen', state)
+        const expected = WIDTH.SMALL
+
+        assert.deepEqual(actual.width, expected)
+      })
     })
     describe('Eraser', () => {
       it('should set instrument to Eraser', () => {
@@ -61,6 +76,21 @@ describe('reducers', () => {
         const expected = new Eraser(context)
 
         assert.deepEqual(actual.instrument, expected)
+      })
+      it('should set width to large', () => {
+        const context = document
+          .createElement('canvas')
+          .getContext('2d') as CanvasRenderingContext2D
+        const state = {
+          ...initApp(context),
+          instrument: new Highlighter(context),
+          width: WIDTH.MEDIUM
+        }
+
+        const actual = changeInstrument('Eraser', state)
+        const expected = WIDTH.LARGE
+
+        assert.deepEqual(actual.width, expected)
       })
     })
   })

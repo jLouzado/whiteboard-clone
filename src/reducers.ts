@@ -15,6 +15,11 @@ export const changeInstrument = (
   return {
     ...state,
     instrument,
-    width: action === 'Highlight' ? WIDTH.MEDIUM : state.width
+    width:
+      action === 'Pen'
+        ? WIDTH.SMALL
+        : action === 'Highlight'
+        ? WIDTH.MEDIUM
+        : WIDTH.LARGE
   }
 }
