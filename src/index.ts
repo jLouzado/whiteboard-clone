@@ -1,12 +1,9 @@
-const app = document.getElementById('root')
+const root = document.getElementById('root')
 const canvas = document.getElementById('canvas') as HTMLCanvasElement | null
 
 let ctx: CanvasRenderingContext2D | null = null
 
-const height = 300
-const width = 300
-
-const state = {
+let state = {
   drawing: false,
   width: 5, // pixels
   color: 'blue'
@@ -46,6 +43,24 @@ const drawing = (context: CanvasRenderingContext2D) => (e: MouseEvent) => {
   context.moveTo(e.clientX, e.clientY)
 }
 
+const setThickPen = (e: Event) => {
+  e.preventDefault()
+  console.log('setting thick')
+  state = {
+    ...state,
+    width: 20
+  }
+}
+
+const setThinPen = (e: Event) => {
+  e.preventDefault()
+  console.log('setting thick')
+  state = {
+    ...state,
+    width: 5
+  }
+}
+
 window.onload = () => {
   if (canvas) {
     resizeCanvas(canvas, window)
@@ -54,6 +69,15 @@ window.onload = () => {
       window.addEventListener('mousedown', drawStart(ctx))
       window.addEventListener('mouseup', drawEnd(ctx))
       window.addEventListener('mousemove', drawing(ctx))
+    }
+
+    const incSize = document.getElementById('setThick')
+    if (incSize) {
+      incSize.addEventListener('click', setThickPen)
+    }
+    const decSize = document.getElementById('setThin')
+    if (decSize) {
+      decSize.addEventListener('click', setThinPen)
     }
   }
 }

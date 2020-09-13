@@ -3,12 +3,18 @@
   <head>
     <title>Whiteboard Clone</title>
     <meta charset="UTF-8" />
+    <link rel="stylesheet" href="index.css"> </link>
   </head>
 
   <body>
-    <div id="root">
-      <div id="tools"></div>
-      <canvas id="canvas"></canvas>
+    <div id="root" class="layout">
+      <div id="tools">
+        <button id="setThick">Thick</button>
+        <button id="setThin">Thin</button>
+      </div>
+      <div id="canvas-container">
+        <canvas id="canvas"></canvas>
+      </div>
     </div>
 
     <script src="src/index.ts"></script>

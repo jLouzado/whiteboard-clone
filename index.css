@@ -1,0 +1,11 @@
+.layout {
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+}
+
+#tools {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+}
