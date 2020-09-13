@@ -15,13 +15,17 @@ export type WBState = {
   instrument: Instrument
 }
 
-export const initApp = (ctx: CanvasRenderingContext2D): WBState => ({
-  drawing: false,
-  width: 5,
-  color: 'blue',
-  context: ctx,
-  instrument: new Pen(ctx)
-})
+export const initApp = (ctx: CanvasRenderingContext2D): WBState => {
+  const instrument = new Pen(ctx)
+
+  return {
+    drawing: false,
+    width: 5,
+    color: instrument.getSupportedColors[0],
+    context: ctx,
+    instrument
+  }
+}
 
 export type Reducer<T> = (action: Event, state: T) => WBState
 

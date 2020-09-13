@@ -3,7 +3,14 @@ import * as sinon from 'sinon'
 import {initApp, WIDTH} from './app'
 import {Eraser, Highlighter, Pen} from './instruments'
 import {MockPen} from './instruments/mock-pen'
-import {changeInstrument, drawEnd, drawStart, drawStroke} from './reducers'
+import {
+  changeColor,
+  changeInstrument,
+  changeSize,
+  drawEnd,
+  drawStart,
+  drawStroke
+} from './reducers'
 
 describe('reducers', () => {
   describe('changeInstrument', () => {
@@ -31,6 +38,18 @@ describe('reducers', () => {
         const expected = WIDTH.MEDIUM
 
         assert.deepEqual(actual.width, expected)
+      })
+      it('should update color', () => {
+        const context = document
+          .createElement('canvas')
+          .getContext('2d') as CanvasRenderingContext2D
+        const state = initApp(context)
+        const e = new Event('click')
+
+        const actual = changeInstrument('Highlight')(e, state)
+        const expected = new Highlighter(context).getSupportedColors[0]
+
+        assert.strictEqual(actual.color, expected)
       })
     })
     describe('Pen', () => {
@@ -66,6 +85,18 @@ describe('reducers', () => {
 
         assert.deepEqual(actual.width, expected)
       })
+      it('should update color', () => {
+        const context = document
+          .createElement('canvas')
+          .getContext('2d') as CanvasRenderingContext2D
+        const state = initApp(context)
+        const e = new Event('click')
+
+        const actual = changeInstrument('Pen')(e, state)
+        const expected = new Pen(context).getSupportedColors[0]
+
+        assert.strictEqual(actual.color, expected)
+      })
     })
     describe('Eraser', () => {
       it('should set instrument to Eraser', () => {
@@ -99,6 +130,18 @@ describe('reducers', () => {
         const expected = WIDTH.LARGE
 
         assert.deepEqual(actual.width, expected)
+      })
+      it('should update color', () => {
+        const context = document
+          .createElement('canvas')
+          .getContext('2d') as CanvasRenderingContext2D
+        const state = initApp(context)
+        const e = new Event('click')
+
+        const actual = changeInstrument('Eraser')(e, state)
+        const expected = state.color
+
+        assert.strictEqual(actual.color, expected)
       })
     })
   })
@@ -160,6 +203,70 @@ describe('reducers', () => {
 
       assert.deepEqual(actual, state)
       sinon.assert.notCalled(instrument.draw)
+    })
+  })
+  describe('changeSize', () => {
+    it('should set sie to small if type is SMALL', () => {
+      const context = document
+        .createElement('canvas')
+        .getContext('2d') as CanvasRenderingContext2D
+      const state = {
+        ...initApp(context),
+        instrument: new Highlighter(context),
+        width: WIDTH.MEDIUM
+      }
+      const e = new Event('click')
+
+      const actual = changeSize(WIDTH.SMALL)(e, state)
+      const expected = WIDTH.SMALL
+
+      assert.deepEqual(actual.width, expected)
+    })
+    it('should set sie to medium if type is MEDIUM', () => {
+      const context = document
+        .createElement('canvas')
+        .getContext('2d') as CanvasRenderingContext2D
+      const state = {
+        ...initApp(context),
+        instrument: new Highlighter(context),
+        width: WIDTH.MEDIUM
+      }
+      const e = new Event('click')
+
+      const actual = changeSize(WIDTH.MEDIUM)(e, state)
+      const expected = WIDTH.MEDIUM
+
+      assert.deepEqual(actual.width, expected)
+    })
+    it('should set sie to large if type is LARGE', () => {
+      const context = document
+        .createElement('canvas')
+        .getContext('2d') as CanvasRenderingContext2D
+      const state = {
+        ...initApp(context),
+        instrument: new Highlighter(context),
+        width: WIDTH.MEDIUM
+      }
+      const e = new Event('click')
+
+      const actual = changeSize(WIDTH.LARGE)(e, state)
+      const expected = WIDTH.LARGE
+
+      assert.deepEqual(actual.width, expected)
+    })
+  })
+  describe('changeColor', () => {
+    it('should set color', () => {
+      const context = document
+        .createElement('canvas')
+        .getContext('2d') as CanvasRenderingContext2D
+      const state = initApp(context)
+      const e = new Event('click')
+
+      const actual = changeColor('#fff')(e, state)
+      const expected = '#fff'
+
+      assert.deepEqual(actual.color, expected)
     })
   })
 })

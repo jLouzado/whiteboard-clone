@@ -7,7 +7,7 @@ export class Highlighter implements Instrument {
     this.ctx = ctx
   }
 
-  getSupportedColors = colors.map((rgb) => `rgba(${rgb.join(',')}, 0.5)`)
+  getSupportedColors = colors.map((rgb) => `rgba(${rgb.join(',')},0.5)`)
 
   drawStart(e: MouseEvent, options: Options) {
     this.ctx.save()

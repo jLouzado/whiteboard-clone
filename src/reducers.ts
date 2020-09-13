@@ -12,9 +12,12 @@ export const changeInstrument = (type: 'Pen' | 'Highlight' | 'Eraser') => (
       ? new Highlighter(state.context)
       : new Eraser(state.context)
 
+  const colors = instrument.getSupportedColors
+
   return {
     ...state,
     instrument,
+    color: colors ? colors[0] : state.color,
     width:
       type === 'Pen'
         ? WIDTH.SMALL
@@ -23,6 +26,24 @@ export const changeInstrument = (type: 'Pen' | 'Highlight' | 'Eraser') => (
         : WIDTH.LARGE
   }
 }
+
+export const changeSize = (type: WIDTH) => (
+  _e: Event,
+  state: WBState
+): WBState => {
+  return {
+    ...state,
+    width: type
+  }
+}
+
+export const changeColor = (type: string) => (
+  _e: Event,
+  state: WBState
+): WBState => ({
+  ...state,
+  color: type
+})
 
 export const drawStart = (e: Event, state: WBState): WBState => {
   if (e instanceof MouseEvent) {
@@ -48,7 +69,6 @@ export const drawEnd = (e: Event, state: WBState): WBState => {
 
 export const drawStroke = (e: Event, state: WBState): WBState => {
   if (e instanceof MouseEvent && state.drawing) {
-    console.log('hello')
     state.instrument.draw(e, {color: state.color, width: state.width})
   }
 
