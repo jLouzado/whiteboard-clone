@@ -22,7 +22,11 @@ export const changeInstrument = (type: 'Pen' | 'Highlight' | 'Eraser') => (
   return {
     ...state,
     instrument,
-    color: colors ? colors[0] : state.color,
+    color: colors
+      ? type === 'Highlight'
+        ? colors[colors.length - 1]
+        : colors[0]
+      : state.color,
     activeInstrument: type,
     width:
       type === 'Pen'

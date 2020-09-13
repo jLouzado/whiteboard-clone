@@ -48,7 +48,8 @@ describe('reducers', () => {
         const e = new Event('click')
 
         const actual = changeInstrument('Highlight')(e, state)
-        const expected = new Highlighter(context).getSupportedColors[0]
+        const colors = new Highlighter(context).getSupportedColors
+        const expected = colors[colors.length - 1]
 
         assert.strictEqual(actual.color, expected)
       })
