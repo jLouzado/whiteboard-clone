@@ -23,6 +23,6 @@ export const initApp = (ctx: CanvasRenderingContext2D): WBState => ({
   instrument: new Pen(ctx)
 })
 
-export type Reducer = <T>(action: T, state: WBState) => WBState
+export type Reducer<T> = (action: Event, state: T) => WBState
 
-export type Dispatcher = (r: Reducer) => (e: Event) => void
+export type Dispatcher<S> = (r: Reducer<S>) => (e: Event) => void

@@ -1,14 +1,14 @@
 import {WBState, WIDTH} from './app'
 import {Eraser, Highlighter, Pen} from './instruments'
 
-export const changeInstrument = (
-  action: 'Pen' | 'Highlight' | 'Eraser',
+export const changeInstrument = (type: 'Pen' | 'Highlight' | 'Eraser') => (
+  _e: Event,
   state: WBState
 ): WBState => {
   const instrument =
-    action === 'Pen'
+    type === 'Pen'
       ? new Pen(state.context)
-      : action === 'Highlight'
+      : type === 'Highlight'
       ? new Highlighter(state.context)
       : new Eraser(state.context)
 
@@ -16,10 +16,20 @@ export const changeInstrument = (
     ...state,
     instrument,
     width:
-      action === 'Pen'
+      type === 'Pen'
         ? WIDTH.SMALL
-        : action === 'Highlight'
+        : type === 'Highlight'
         ? WIDTH.MEDIUM
         : WIDTH.LARGE
   }
 }
+
+export const drawStart = (e: Event, state: WBState): WBState => ({
+  ...state,
+  drawing: true
+})
+
+export const drawEnd = (e: Event, state: WBState): WBState => ({
+  ...state,
+  drawing: false
+})

@@ -1,7 +1,7 @@
 import {assert} from 'chai'
 import {initApp, WIDTH} from './app'
 import {Eraser, Highlighter, Pen} from './instruments'
-import {changeInstrument} from './reducers'
+import {changeInstrument, drawEnd, drawStart} from './reducers'
 
 describe('reducers', () => {
   describe('changeInstrument', () => {
@@ -11,8 +11,9 @@ describe('reducers', () => {
           .createElement('canvas')
           .getContext('2d') as CanvasRenderingContext2D
         const state = initApp(context)
+        const e = new Event('click')
 
-        const actual = changeInstrument('Highlight', state)
+        const actual = changeInstrument('Highlight')(e, state)
         const expected = new Highlighter(context)
 
         assert.deepEqual(actual.instrument, expected)
@@ -22,8 +23,9 @@ describe('reducers', () => {
           .createElement('canvas')
           .getContext('2d') as CanvasRenderingContext2D
         const state = initApp(context)
+        const e = new Event('click')
 
-        const actual = changeInstrument('Highlight', state)
+        const actual = changeInstrument('Highlight')(e, state)
         const expected = WIDTH.MEDIUM
 
         assert.deepEqual(actual.width, expected)
@@ -39,8 +41,9 @@ describe('reducers', () => {
           ...initApp(context),
           instrument: new Highlighter(context)
         }
+        const e = new Event('click')
 
-        const actual = changeInstrument('Pen', state)
+        const actual = changeInstrument('Pen')(e, state)
         const expected = new Pen(context)
 
         assert.deepEqual(actual.instrument, expected)
@@ -54,8 +57,9 @@ describe('reducers', () => {
           instrument: new Highlighter(context),
           width: WIDTH.MEDIUM
         }
+        const e = new Event('click')
 
-        const actual = changeInstrument('Pen', state)
+        const actual = changeInstrument('Pen')(e, state)
         const expected = WIDTH.SMALL
 
         assert.deepEqual(actual.width, expected)
@@ -71,8 +75,9 @@ describe('reducers', () => {
           ...initApp(context),
           instrument: new Highlighter(context)
         }
+        const e = new Event('click')
 
-        const actual = changeInstrument('Eraser', state)
+        const actual = changeInstrument('Eraser')(e, state)
         const expected = new Eraser(context)
 
         assert.deepEqual(actual.instrument, expected)
@@ -86,12 +91,41 @@ describe('reducers', () => {
           instrument: new Highlighter(context),
           width: WIDTH.MEDIUM
         }
+        const e = new Event('click')
 
-        const actual = changeInstrument('Eraser', state)
+        const actual = changeInstrument('Eraser')(e, state)
         const expected = WIDTH.LARGE
 
         assert.deepEqual(actual.width, expected)
       })
+    })
+  })
+  describe('drawStart', () => {
+    it('should set isDrawing to true', () => {
+      const context = document
+        .createElement('canvas')
+        .getContext('2d') as CanvasRenderingContext2D
+
+      const state = initApp(context)
+      const e = new Event('someEvent')
+
+      const actual = drawStart(e, state)
+
+      assert.isTrue(actual.drawing)
+    })
+  })
+  describe('drawEnd', () => {
+    it('should set isDrawing to false', () => {
+      const context = document
+        .createElement('canvas')
+        .getContext('2d') as CanvasRenderingContext2D
+
+      const state = {...initApp(context), drawing: true}
+      const e = new Event('someEvent')
+
+      const actual = drawEnd(e, state)
+
+      assert.isFalse(actual.drawing)
     })
   })
 })
