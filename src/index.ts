@@ -1,5 +1,4 @@
 import {Eraser, Highlighter, Instrument, Pen} from './instruments'
-import {SingleStroke} from './instruments/uni-stroke-hoc'
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement | null
 
@@ -13,18 +12,45 @@ let state = {
 
 let instrument: Instrument | null = null
 
+let previousDrawing: string | null = null
+
 const resizeCanvas = (canvas: HTMLCanvasElement, window: Window) => {
   canvas.height = window.innerHeight
   canvas.width = window.innerWidth
 }
 
-const drawStart = (e: MouseEvent) => {
+const drawStart = (context: CanvasRenderingContext2D) => (e: MouseEvent) => {
   state.drawing = true
-  instrument?.drawStart(e, state)
+
+  // TODO(code-quality): unfortunately the abstraction here is leaky but I want to get this working.
+  if (canvas && instrument instanceof Highlighter) {
+    console.log('drawStart: we are highlighting')
+    const img = new Image()
+    if (previousDrawing) {
+      console.log('here')
+      img.src = previousDrawing
+      img.onload = () => {
+        console.log('clearing')
+        context.clearRect(0, 0, canvas.width, canvas.height)
+        console.log('redrawing', previousDrawing?.length)
+        context.drawImage(img, 0, 0)
+
+        instrument?.drawStart(e, state)
+      }
+    } else {
+      console.log('saving')
+      previousDrawing = canvas.toDataURL()
+
+      instrument?.drawStart(e, state)
+    }
+  } else {
+    instrument?.drawStart(e, state)
+  }
 }
 
 const drawEnd = (e: MouseEvent) => {
   state.drawing = false
+
   instrument?.drawEnd(e)
 }
 
@@ -66,7 +92,7 @@ const setHighlighter = (canvas: HTMLCanvasElement) => (e?: Event) => {
   const context = canvas.getContext('2d')
   e?.preventDefault()
   if (context) {
-    instrument = new SingleStroke(canvas, new Highlighter(context))
+    instrument = new Highlighter(context)
   }
 }
 
@@ -75,7 +101,7 @@ window.onload = () => {
     resizeCanvas(canvas, window)
     ctx = canvas.getContext('2d') ?? null
     if (ctx) {
-      window.addEventListener('mousedown', drawStart)
+      window.addEventListener('mousedown', drawStart(ctx))
       window.addEventListener('mouseup', drawEnd)
       window.addEventListener('mousemove', drawing)
 
