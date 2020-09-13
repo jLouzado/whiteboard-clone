@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "snabbdom": "^2.0.0",
-    "tslib": "^2.0.1"
+    "tslib": "^2.0.1",
+    "typestyle": "^2.1.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.12",
