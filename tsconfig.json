@@ -11,6 +11,15 @@
       "dom"
     ],
     "rootDir": "src",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "newLine": "LF",
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "strictNullChecks": true,
+    "removeComments": true,
+    "noEmitOnError": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true
   }
 }
