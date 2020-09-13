@@ -11,7 +11,7 @@ const instruments: ['Pen', 'Highlight', 'Eraser'] = [
 export const view = (dispatch: Dispatcher<WBState>, state: WBState) => {
   const colors = state.instrument.getSupportedColors
 
-  return h('div', [
+  return h('div#tools', [
     ...instruments.map((i) =>
       h(
         'button.ins',
