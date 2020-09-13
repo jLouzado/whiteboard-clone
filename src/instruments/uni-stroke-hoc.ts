@@ -1,11 +1,12 @@
 import {Instrument, Options} from './base'
 
-export class SingleStroke implements Instrument {
+export class SingleStroke extends Instrument {
   private im
   private canvas
   private prevImg
 
   constructor(canvas: HTMLCanvasElement, im: Instrument) {
+    super()
     this.im = im
     this.canvas = canvas
     this.prevImg = canvas.toDataURL()
@@ -39,5 +40,17 @@ export class SingleStroke implements Instrument {
 
   get getSupportedColors() {
     return this.im.getSupportedColors
+  }
+
+  cleanup() {
+    const img = new Image()
+    img.src = this.prevImg
+    const context = this.canvas.getContext('2d')
+    img.onload = () => {
+      // clear canvas
+      context?.clearRect(0, 0, this.canvas.width, this.canvas.height)
+      // redraw without last stroke
+      context?.drawImage(img, 0, 0)
+    }
   }
 }

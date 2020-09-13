@@ -143,6 +143,26 @@ describe('reducers', () => {
         assert.strictEqual(actual.color, expected)
       })
     })
+    describe('SingleStrokeHOC', () => {
+      it('should call cleanup when changing instrument', () => {
+        const canvas = document.createElement('canvas')
+        const context = canvas.getContext('2d') as CanvasRenderingContext2D
+
+        const instrument = new SingleStroke(canvas, new MockPen())
+        instrument.cleanup = sinon.stub()
+
+        const state = {
+          ...initApp(context, canvas),
+          instrument: instrument
+        }
+        const e = new Event('click')
+
+        changeInstrument('Pen')(e, state)
+
+        const asAny = state.instrument as any
+        sinon.assert.calledOnce(asAny.cleanup)
+      })
+    })
   })
   describe('drawStart', () => {
     it('should set isDrawing to true', () => {

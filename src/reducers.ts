@@ -6,6 +6,10 @@ export const changeInstrument = (type: 'Pen' | 'Highlight' | 'Eraser') => (
   _e: Event,
   state: WBState
 ): WBState => {
+  if (state.instrument instanceof SingleStroke) {
+    state.instrument.cleanup()
+  }
+
   const instrument =
     type === 'Pen'
       ? new Pen(state.context)
