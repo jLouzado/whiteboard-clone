@@ -23,6 +23,7 @@ export const changeInstrument = (type: 'Pen' | 'Highlight' | 'Eraser') => (
     ...state,
     instrument,
     color: colors ? colors[0] : state.color,
+    activeInstrument: type,
     width:
       type === 'Pen'
         ? WIDTH.SMALL

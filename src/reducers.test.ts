@@ -1,6 +1,6 @@
 import {assert} from 'chai'
 import * as sinon from 'sinon'
-import {initApp, WIDTH} from './app'
+import {initApp, WBState, WIDTH} from './app'
 import {Eraser, Highlighter, Pen} from './instruments'
 import {MockPen} from './instruments/mock-pen'
 import {SingleStroke} from './instruments/uni-stroke-hoc'
@@ -52,6 +52,18 @@ describe('reducers', () => {
 
         assert.strictEqual(actual.color, expected)
       })
+      it('should update activeInstrument', () => {
+        const canvas = document.createElement('canvas')
+        const context = canvas.getContext('2d') as CanvasRenderingContext2D
+
+        const state = initApp(context, canvas)
+        const e = new Event('click')
+
+        const actual = changeInstrument('Highlight')(e, state)
+        const expected = 'Highlight'
+
+        assert.strictEqual(actual.activeInstrument, expected)
+      })
     })
     describe('Pen', () => {
       it('should set instrument to Pen', () => {
@@ -89,13 +101,28 @@ describe('reducers', () => {
         const canvas = document.createElement('canvas')
         const context = canvas.getContext('2d') as CanvasRenderingContext2D
 
-        const state = initApp(context, canvas)
+        const state = {...initApp(context, canvas), color: 'something'}
         const e = new Event('click')
 
         const actual = changeInstrument('Pen')(e, state)
         const expected = new Pen(context).getSupportedColors[0]
 
         assert.strictEqual(actual.color, expected)
+      })
+      it('should update activeInstrument', () => {
+        const canvas = document.createElement('canvas')
+        const context = canvas.getContext('2d') as CanvasRenderingContext2D
+
+        const state: WBState = {
+          ...initApp(context, canvas),
+          activeInstrument: 'Eraser'
+        }
+        const e = new Event('click')
+
+        const actual = changeInstrument('Pen')(e, state)
+        const expected = 'Pen'
+
+        assert.strictEqual(actual.activeInstrument, expected)
       })
     })
     describe('Eraser', () => {
@@ -141,6 +168,21 @@ describe('reducers', () => {
         const expected = state.color
 
         assert.strictEqual(actual.color, expected)
+      })
+      it('should update activeInstrument', () => {
+        const canvas = document.createElement('canvas')
+        const context = canvas.getContext('2d') as CanvasRenderingContext2D
+
+        const state: WBState = {
+          ...initApp(context, canvas),
+          activeInstrument: 'Pen'
+        }
+        const e = new Event('click')
+
+        const actual = changeInstrument('Eraser')(e, state)
+        const expected = 'Eraser'
+
+        assert.strictEqual(actual.activeInstrument, expected)
       })
     })
     describe('SingleStrokeHOC', () => {

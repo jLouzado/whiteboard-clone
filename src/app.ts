@@ -13,6 +13,7 @@ export type WBState = {
   color: string
   canvasRef: HTMLCanvasElement
   context: CanvasRenderingContext2D
+  activeInstrument: 'Pen' | 'Highlight' | 'Eraser'
   instrument: Instrument
 }
 
@@ -28,6 +29,7 @@ export const initApp = (
     color: instrument.getSupportedColors[0],
     canvasRef: canvas,
     context: ctx,
+    activeInstrument: 'Pen',
     instrument
   }
 }
