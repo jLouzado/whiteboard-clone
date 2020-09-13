@@ -1,4 +1,4 @@
-import {Eraser, Instrument, Pen} from './instruments'
+import {Highlighter, Eraser, Instrument, Pen} from './instruments'
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement | null
 
@@ -63,6 +63,11 @@ const setPen = (context: CanvasRenderingContext2D) => (e?: Event) => {
   instrument = new Pen(context)
 }
 
+const setHighlighter = (context: CanvasRenderingContext2D) => (e?: Event) => {
+  e?.preventDefault()
+  instrument = new Highlighter(context)
+}
+
 window.onload = () => {
   if (canvas) {
     resizeCanvas(canvas, window)
@@ -72,7 +77,7 @@ window.onload = () => {
       window.addEventListener('mouseup', drawEnd)
       window.addEventListener('mousemove', drawing)
 
-      setPen(ctx)()
+      setHighlighter(ctx)()
       const eraser = document.getElementById('eraser')
       if (eraser) {
         eraser.addEventListener('click', setEraser(ctx))
@@ -80,6 +85,10 @@ window.onload = () => {
       const pen = document.getElementById('pen')
       if (pen) {
         pen.addEventListener('click', setPen(ctx))
+      }
+      const highlighter = document.getElementById('highlighter')
+      if (highlighter) {
+        highlighter.addEventListener('click', setHighlighter(ctx))
       }
     }
 
