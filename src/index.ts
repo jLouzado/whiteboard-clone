@@ -1,4 +1,4 @@
-import { Pen, Instrument } from './instruments'
+import {Pen, Instrument} from './instruments'
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement | null
 

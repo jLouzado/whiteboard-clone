@@ -1,4 +1,4 @@
-import { Instrument, Options } from './base'
+import {Instrument, Options} from './base'
 
 export class Pen implements Instrument {
   ctx
