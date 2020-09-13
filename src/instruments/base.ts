@@ -5,7 +5,10 @@ export abstract class Instrument {
     this.ctx = ctx
   }
 
-  abstract drawStart(e: MouseEvent): void
+  abstract drawStart(
+    e: MouseEvent,
+    state: { width: number; color: string }
+  ): void
   abstract drawEnd(e: MouseEvent): void
   // TODO: define state type
   abstract draw(e: MouseEvent, state: { width: number; color: string }): void

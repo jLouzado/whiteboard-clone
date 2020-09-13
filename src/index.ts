@@ -20,7 +20,7 @@ const resizeCanvas = (canvas: HTMLCanvasElement, window: Window) => {
 const drawStart = (e: MouseEvent) => {
   console.log('starting')
   state.drawing = true
-  instrument?.drawStart(e)
+  instrument?.drawStart(e, state)
 }
 
 const drawEnd = (e: MouseEvent) => {

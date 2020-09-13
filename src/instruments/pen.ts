@@ -7,9 +7,9 @@ export class Pen implements Instrument {
     this.ctx = ctx
   }
 
-  drawStart(e: MouseEvent) {
+  drawStart(e: MouseEvent, state: { width: number; color: string }) {
     this.ctx.beginPath()
-    // draw dot
+    this.draw(e, state)
   }
 
   drawEnd() {
