@@ -1,3 +1,4 @@
+import {VNode} from 'snabbdom/build/package/vnode'
 import {initApp, Reducer, WBState} from './app'
 import {drawEnd, drawStart, drawStroke} from './reducers'
 import {patch} from './utilities/patch'
@@ -9,7 +10,7 @@ const resizeCanvas = (canvas: HTMLCanvasElement, window: Window) => {
 }
 
 window.onload = () => {
-  const app = document.getElementById('tools') as HTMLElement
+  let app: HTMLElement | VNode = document.getElementById('tools') as HTMLElement
   const canvas = document.getElementById('canvas') as HTMLCanvasElement
   resizeCanvas(canvas, window)
 
@@ -20,7 +21,8 @@ window.onload = () => {
     /** Receives actions from DOM and updates state for tools */
     const dispatch = (reducer: Reducer<WBState>) => (e: Event) => {
       state = reducer(e, state)
-      patch(app, view(dispatch, state))
+      console.log(state.width, state.color)
+      app = patch(app, view(dispatch, state))
     }
 
     /*
@@ -31,7 +33,7 @@ window.onload = () => {
     canvas.addEventListener('mousemove', dispatch(drawStroke))
 
     // First patch, to kick things off
-    patch(app, view(dispatch, state))
+    app = patch(app, view(dispatch, state))
   } else {
     throw new Error('Failed to find Context')
   }
