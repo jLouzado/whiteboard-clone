@@ -1,11 +1,16 @@
 import {WBState} from './app'
-import {Highlighter} from './instruments'
+import {Eraser, Highlighter, Pen} from './instruments'
 
 export const changeInstrument = (
-  _action: 'Pen' | 'Highlight' | 'Eraser',
+  action: 'Pen' | 'Highlight' | 'Eraser',
   state: WBState
 ): WBState => {
-  const instrument = new Highlighter(state.context)
+  const instrument =
+    action === 'Pen'
+      ? new Pen(state.context)
+      : action === 'Highlight'
+      ? new Highlighter(state.context)
+      : new Eraser(state.context)
 
   return {
     ...state,
