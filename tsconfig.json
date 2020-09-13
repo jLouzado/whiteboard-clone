@@ -19,6 +19,8 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "importHelpers": true,
+    "noEmit": true,
     "forceConsistentCasingInFileNames": true
-  }
+  },
+  "exclude": ["dist/"]
 }

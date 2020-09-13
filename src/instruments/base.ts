@@ -4,7 +4,7 @@ export type Options = {
 }
 
 export abstract class Instrument {
-  ctx
+  ctx: CanvasRenderingContext2D | null
 
   constructor(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx

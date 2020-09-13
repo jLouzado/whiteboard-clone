@@ -1,4 +1,5 @@
-import {Highlighter, Eraser, Instrument, Pen} from './instruments'
+import {Eraser, Highlighter, Instrument, Pen} from './instruments'
+import {SingleStroke} from './instruments/uni-stroke-hoc'
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement | null
 
@@ -61,37 +62,11 @@ const setPen = (context: CanvasRenderingContext2D) => (e?: Event) => {
   instrument = new Pen(context)
 }
 
-const UndoManager = (canvas: HTMLCanvasElement) => {
-  const context = canvas.getContext('2d')
-  const stack: string[] = []
-
-  return {
-    save: () => {
-      const content = canvas.toDataURL()
-      stack.push(content)
-      console.log('push', stack.length)
-    },
-    undo: () => {
-      const img = new Image()
-      const content = stack.pop()
-      console.log('pop', stack.length)
-      if (content && context) {
-        img.src = content
-        img.onload = function () {
-          console.log('redrawing')
-          context.drawImage(img, 0, 0)
-        }
-      }
-    }
-  }
-}
-
 const setHighlighter = (canvas: HTMLCanvasElement) => (e?: Event) => {
   const context = canvas.getContext('2d')
   e?.preventDefault()
   if (context) {
-    const undoer = UndoManager(canvas)
-    instrument = new Highlighter(context, undoer)
+    instrument = new SingleStroke(canvas, new Highlighter(context))
   }
 }
 
