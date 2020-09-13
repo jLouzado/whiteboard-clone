@@ -8,12 +8,11 @@ export class Pen implements Instrument {
   }
 
   drawStart(e: MouseEvent, options: Options) {
-    this.ctx.beginPath()
     this.draw(e, options)
   }
 
   drawEnd() {
-    this.ctx.closePath()
+    this.ctx.beginPath()
   }
 
   draw(e: MouseEvent, options: Options) {
@@ -22,7 +21,6 @@ export class Pen implements Instrument {
     this.ctx.strokeStyle = options.color
     this.ctx.lineJoin = 'round'
 
-    console.log('drawing')
     this.ctx.lineTo(e.clientX, e.clientY)
     this.ctx.stroke()
 

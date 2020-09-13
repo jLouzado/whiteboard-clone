@@ -10,12 +10,11 @@ export class Eraser implements Instrument {
   }
 
   drawStart(e: MouseEvent, options: Options) {
-    this.ctx.beginPath()
     this.draw(e, options)
   }
 
   drawEnd() {
-    this.ctx.closePath()
+    this.ctx.beginPath()
 
     // reset composition mode after stroke
     this.ctx.globalCompositeOperation = this.compositionOperation
