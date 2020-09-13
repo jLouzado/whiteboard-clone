@@ -1,5 +1,5 @@
 import {initApp, Reducer, WBState} from './app'
-import {drawEnd, drawStart} from './reducers'
+import {drawEnd, drawStart, drawStroke} from './reducers'
 import {patch} from './utilities/patch'
 import {view} from './view'
 
@@ -20,19 +20,15 @@ window.onload = () => {
     /** Receives actions from DOM and updates state for tools */
     const dispatch = (reducer: Reducer<WBState>) => (e: Event) => {
       state = reducer(e, state)
-      console.table(state.width)
       patch(app, view(dispatch, state))
     }
 
     /*
     Event Listeners for Canvas
     */
-    canvas.addEventListener('mousedown', (e: Event) => {
-      drawStart(e, state)
-    })
-    canvas.addEventListener('mouseup', (e: Event) => {
-      drawEnd(e, state)
-    })
+    canvas.addEventListener('mousedown', dispatch(drawStart))
+    canvas.addEventListener('mouseup', dispatch(drawEnd))
+    canvas.addEventListener('mousemove', dispatch(drawStroke))
 
     // First patch, to kick things off
     patch(app, view(dispatch, state))

@@ -1,7 +1,9 @@
 import {assert} from 'chai'
+import * as sinon from 'sinon'
 import {initApp, WIDTH} from './app'
 import {Eraser, Highlighter, Pen} from './instruments'
-import {changeInstrument, drawEnd, drawStart} from './reducers'
+import {MockPen} from './instruments/mock-pen'
+import {changeInstrument, drawEnd, drawStart, drawStroke} from './reducers'
 
 describe('reducers', () => {
   describe('changeInstrument', () => {
@@ -126,6 +128,38 @@ describe('reducers', () => {
       const actual = drawEnd(e, state)
 
       assert.isFalse(actual.drawing)
+    })
+  })
+  describe('draw', () => {
+    it('should call draw if isDrawing is true', () => {
+      const context = document
+        .createElement('canvas')
+        .getContext('2d') as CanvasRenderingContext2D
+
+      const instrument = new MockPen()
+
+      const state = {...initApp(context), drawing: true, instrument}
+      const e = new MouseEvent('someEvent')
+
+      const actual = drawStroke(e, state)
+
+      assert.deepEqual(actual, state)
+      sinon.assert.calledOnce(instrument.draw)
+    })
+    it('should NOT call draw if isDrawing is false', () => {
+      const context = document
+        .createElement('canvas')
+        .getContext('2d') as CanvasRenderingContext2D
+
+      const instrument = new MockPen()
+
+      const state = {...initApp(context), drawing: false, instrument}
+      const e = new Event('someEvent')
+
+      const actual = drawStroke(e, state)
+
+      assert.deepEqual(actual, state)
+      sinon.assert.notCalled(instrument.draw)
     })
   })
 })

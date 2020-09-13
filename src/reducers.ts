@@ -24,12 +24,33 @@ export const changeInstrument = (type: 'Pen' | 'Highlight' | 'Eraser') => (
   }
 }
 
-export const drawStart = (e: Event, state: WBState): WBState => ({
-  ...state,
-  drawing: true
-})
+export const drawStart = (e: Event, state: WBState): WBState => {
+  if (e instanceof MouseEvent) {
+    state.instrument.drawStart(e, {color: state.color, width: state.width})
+  }
 
-export const drawEnd = (e: Event, state: WBState): WBState => ({
-  ...state,
-  drawing: false
-})
+  return {
+    ...state,
+    drawing: true
+  }
+}
+
+export const drawEnd = (e: Event, state: WBState): WBState => {
+  if (e instanceof MouseEvent) {
+    state.instrument.drawEnd(e)
+  }
+
+  return {
+    ...state,
+    drawing: false
+  }
+}
+
+export const drawStroke = (e: Event, state: WBState): WBState => {
+  if (e instanceof MouseEvent && state.drawing) {
+    console.log('hello')
+    state.instrument.draw(e, {color: state.color, width: state.width})
+  }
+
+  return state
+}
