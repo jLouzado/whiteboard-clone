@@ -18,13 +18,11 @@ const resizeCanvas = (canvas: HTMLCanvasElement, window: Window) => {
 }
 
 const drawStart = (e: MouseEvent) => {
-  console.log('starting')
   state.drawing = true
   instrument?.drawStart(e, state)
 }
 
 const drawEnd = (e: MouseEvent) => {
-  console.log('ending')
   state.drawing = false
   instrument?.drawEnd(e)
 }
@@ -63,21 +61,50 @@ const setPen = (context: CanvasRenderingContext2D) => (e?: Event) => {
   instrument = new Pen(context)
 }
 
-const setHighlighter = (context: CanvasRenderingContext2D) => (e?: Event) => {
+const UndoManager = (canvas: HTMLCanvasElement) => {
+  const context = canvas.getContext('2d')
+  const stack: string[] = []
+
+  return {
+    save: () => {
+      const content = canvas.toDataURL()
+      stack.push(content)
+      console.log('push', stack.length)
+    },
+    undo: () => {
+      const img = new Image()
+      const content = stack.pop()
+      console.log('pop', stack.length)
+      if (content && context) {
+        img.src = content
+        img.onload = function () {
+          console.log('redrawing')
+          context.drawImage(img, 0, 0)
+        }
+      }
+    }
+  }
+}
+
+const setHighlighter = (canvas: HTMLCanvasElement) => (e?: Event) => {
+  const context = canvas.getContext('2d')
   e?.preventDefault()
-  instrument = new Highlighter(context)
+  if (context) {
+    const undoer = UndoManager(canvas)
+    instrument = new Highlighter(context, undoer)
+  }
 }
 
 window.onload = () => {
   if (canvas) {
     resizeCanvas(canvas, window)
-    ctx = canvas?.getContext('2d') ?? null
+    ctx = canvas.getContext('2d') ?? null
     if (ctx) {
       window.addEventListener('mousedown', drawStart)
       window.addEventListener('mouseup', drawEnd)
       window.addEventListener('mousemove', drawing)
 
-      setHighlighter(ctx)()
+      setPen(ctx)()
       const eraser = document.getElementById('eraser')
       if (eraser) {
         eraser.addEventListener('click', setEraser(ctx))
@@ -88,7 +115,7 @@ window.onload = () => {
       }
       const highlighter = document.getElementById('highlighter')
       if (highlighter) {
-        highlighter.addEventListener('click', setHighlighter(ctx))
+        highlighter.addEventListener('click', setHighlighter(canvas))
       }
     }
 

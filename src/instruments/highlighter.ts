@@ -2,13 +2,21 @@ import {Instrument, Options} from './base'
 
 export class Highlighter implements Instrument {
   ctx
+  undoer
 
-  constructor(ctx: CanvasRenderingContext2D) {
+  constructor(
+    ctx: CanvasRenderingContext2D,
+    undoManager: {save: () => void; undo: () => void}
+  ) {
     this.ctx = ctx
+    this.undoer = undoManager
+    this.undoer.save()
   }
 
   drawStart(e: MouseEvent, options: Options) {
     this.ctx.save()
+    this.undoer.undo()
+    this.undoer.save()
     this.draw(e, options)
   }
 
