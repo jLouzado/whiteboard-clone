@@ -19,10 +19,14 @@ const styles = stylesheet({
     }
   },
   button: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     height: '45px',
     width: '60px',
     borderRadius: '8px',
     border: 'none',
+    cursor: 'pointer',
     $nest: {
       '&:hover': {
         border: '1px solid #282828'
@@ -30,7 +34,16 @@ const styles = stylesheet({
     }
   },
   selected: {
-    backgroundColor: '#dcdcdc'
+    backgroundColor: '#969696'
+  },
+  sizeSelector: {
+    borderRadius: '50%',
+    backgroundColor: 'black'
+  },
+  colorSelector: {
+    borderRadius: '4px',
+    height: '20px',
+    width: '20px'
   }
 })
 
@@ -74,19 +87,36 @@ export const view = (dispatch: Dispatcher<WBState>, state: WBState) => {
       })
     ),
     ...[WIDTH.SMALL, WIDTH.MEDIUM, WIDTH.LARGE].map((width) =>
-      hButton(dispatch(changeSize(width)), width, {
-        key: `size-${width}`,
-        title: `Set Width to ${width}`,
-        isSelected: state.width === width
-      })
+      hButton(
+        dispatch(changeSize(width)),
+        h('div', {
+          class: {[styles.sizeSelector]: true},
+          style: {
+            width: String(width),
+            height: String(width)
+          }
+        }),
+        {
+          key: `size-${width}`,
+          title: `Set Width to ${width}`,
+          isSelected: state.width === width
+        }
+      )
     ),
     ...(colors
       ? colors.map((color) =>
-          hButton(dispatch(changeColor(color)), color, {
-            key: `col-${color}`,
-            title: 'Set Colour',
-            isSelected: state.color === color
-          })
+          hButton(
+            dispatch(changeColor(color)),
+            h('div', {
+              style: {backgroundColor: color},
+              class: {[styles.colorSelector]: true}
+            }),
+            {
+              key: `col-${color}`,
+              title: 'Set Colour',
+              isSelected: state.color === color
+            }
+          )
         )
       : [''])
   ])
