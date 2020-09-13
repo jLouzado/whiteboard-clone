@@ -1,4 +1,4 @@
-import {Pen, Instrument} from './instruments'
+import {Eraser, Instrument, Pen} from './instruments'
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement | null
 
@@ -53,15 +53,34 @@ const setThinPen = (e: Event) => {
   }
 }
 
+const setEraser = (context: CanvasRenderingContext2D) => (e: Event) => {
+  e.preventDefault()
+  instrument = new Eraser(context)
+}
+
+const setPen = (context: CanvasRenderingContext2D) => (e?: Event) => {
+  e?.preventDefault()
+  instrument = new Pen(context)
+}
+
 window.onload = () => {
   if (canvas) {
     resizeCanvas(canvas, window)
     ctx = canvas?.getContext('2d') ?? null
     if (ctx) {
-      instrument = new Pen(ctx)
       window.addEventListener('mousedown', drawStart)
       window.addEventListener('mouseup', drawEnd)
       window.addEventListener('mousemove', drawing)
+
+      setPen(ctx)()
+      const eraser = document.getElementById('eraser')
+      if (eraser) {
+        eraser.addEventListener('click', setEraser(ctx))
+      }
+      const pen = document.getElementById('pen')
+      if (pen) {
+        pen.addEventListener('click', setPen(ctx))
+      }
     }
 
     const incSize = document.getElementById('setThick')
