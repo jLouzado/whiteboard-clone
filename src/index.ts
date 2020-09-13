@@ -1,4 +1,5 @@
-const root = document.getElementById('root')
+import { Pen, Instrument } from './instruments'
+
 const canvas = document.getElementById('canvas') as HTMLCanvasElement | null
 
 let ctx: CanvasRenderingContext2D | null = null
@@ -9,38 +10,29 @@ let state = {
   color: 'blue'
 }
 
+let instrument: Instrument | null = null
+
 const resizeCanvas = (canvas: HTMLCanvasElement, window: Window) => {
   canvas.height = window.innerHeight
   canvas.width = window.innerWidth
 }
 
-const drawStart = (context: CanvasRenderingContext2D) => (e: MouseEvent) => {
+const drawStart = (e: MouseEvent) => {
   console.log('starting')
   state.drawing = true
-  context.beginPath()
-  drawing(context)(e)
+  instrument?.drawStart(e)
 }
 
-const drawEnd = (context: CanvasRenderingContext2D) => () => {
+const drawEnd = (e: MouseEvent) => {
   console.log('ending')
   state.drawing = false
-  context.closePath()
+  instrument?.drawEnd(e)
 }
 
-const drawing = (context: CanvasRenderingContext2D) => (e: MouseEvent) => {
+const drawing = (e: MouseEvent) => {
   if (!state.drawing) return
 
-  context.lineCap = 'round'
-  context.lineWidth = state.width
-  context.strokeStyle = state.color
-  context.lineJoin = 'round'
-
-  console.log('drawing')
-  context.lineTo(e.clientX, e.clientY)
-  context.stroke()
-  // smoothen out the line
-  context.beginPath()
-  context.moveTo(e.clientX, e.clientY)
+  instrument?.draw(e, state)
 }
 
 const setThickPen = (e: Event) => {
@@ -66,9 +58,10 @@ window.onload = () => {
     resizeCanvas(canvas, window)
     ctx = canvas?.getContext('2d') ?? null
     if (ctx) {
-      window.addEventListener('mousedown', drawStart(ctx))
-      window.addEventListener('mouseup', drawEnd(ctx))
-      window.addEventListener('mousemove', drawing(ctx))
+      instrument = new Pen(ctx)
+      window.addEventListener('mousedown', drawStart)
+      window.addEventListener('mouseup', drawEnd)
+      window.addEventListener('mousemove', drawing)
     }
 
     const incSize = document.getElementById('setThick')
