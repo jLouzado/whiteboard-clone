@@ -2,23 +2,19 @@ import {Instrument, Options} from './base'
 
 export class Highlighter implements Instrument {
   ctx
-  compositionOperation: string
-  alpha: number
 
   constructor(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx
-    this.compositionOperation = ctx.globalCompositeOperation
-    this.alpha = ctx.globalAlpha
   }
 
   drawStart(e: MouseEvent, options: Options) {
+    this.ctx.save()
     this.draw(e, options)
   }
 
   drawEnd() {
+    this.ctx.restore()
     this.ctx.beginPath()
-    this.ctx.globalCompositeOperation = this.compositionOperation
-    this.ctx.globalAlpha = this.alpha
   }
 
   draw(e: MouseEvent, options: Options) {

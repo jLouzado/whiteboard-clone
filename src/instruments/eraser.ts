@@ -2,22 +2,19 @@ import {Instrument, Options} from './base'
 
 export class Eraser implements Instrument {
   ctx
-  compositionOperation: string
 
   constructor(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx
-    this.compositionOperation = ctx.globalCompositeOperation
   }
 
   drawStart(e: MouseEvent, options: Options) {
+    this.ctx.save()
     this.draw(e, options)
   }
 
   drawEnd() {
+    this.ctx.restore()
     this.ctx.beginPath()
-
-    // reset composition mode after stroke
-    this.ctx.globalCompositeOperation = this.compositionOperation
   }
 
   draw(e: MouseEvent, options: Options) {
