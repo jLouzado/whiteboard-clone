@@ -1,4 +1,4 @@
-import {WBState} from './app'
+import {WBState, WIDTH} from './app'
 import {Eraser, Highlighter, Pen} from './instruments'
 
 export const changeInstrument = (
@@ -14,6 +14,7 @@ export const changeInstrument = (
 
   return {
     ...state,
-    instrument
+    instrument,
+    width: action === 'Highlight' ? WIDTH.MEDIUM : state.width
   }
 }

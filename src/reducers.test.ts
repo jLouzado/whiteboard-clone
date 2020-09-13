@@ -1,5 +1,5 @@
 import {assert} from 'chai'
-import {initApp} from './app'
+import {initApp, WIDTH} from './app'
 import {Eraser, Highlighter, Pen} from './instruments'
 import {changeInstrument} from './reducers'
 
@@ -16,6 +16,17 @@ describe('reducers', () => {
         const expected = new Highlighter(context)
 
         assert.deepEqual(actual.instrument, expected)
+      })
+      it('should set width to medium', () => {
+        const context = document
+          .createElement('canvas')
+          .getContext('2d') as CanvasRenderingContext2D
+        const state = initApp(context)
+
+        const actual = changeInstrument('Highlight', state)
+        const expected = WIDTH.MEDIUM
+
+        assert.deepEqual(actual.width, expected)
       })
     })
     describe('Pen', () => {

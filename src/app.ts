@@ -1,9 +1,15 @@
 import {Instrument, Pen} from './instruments'
 
+export enum WIDTH {
+  SMALL = 5,
+  MEDIUM = 10,
+  LARGE = 20
+}
+
 export type WBState = {
   drawing: boolean
   /** width in pixels */
-  width: 1 | 3 | 5
+  width: WIDTH
   color: string
   context: CanvasRenderingContext2D
   instrument: Instrument
