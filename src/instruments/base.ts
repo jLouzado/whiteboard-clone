@@ -1,3 +1,8 @@
+export type Options = {
+  width: number
+  color: string
+}
+
 export abstract class Instrument {
   ctx
 
@@ -5,11 +10,7 @@ export abstract class Instrument {
     this.ctx = ctx
   }
 
-  abstract drawStart(
-    e: MouseEvent,
-    state: { width: number; color: string }
-  ): void
+  abstract drawStart(e: MouseEvent, options: Options): void
   abstract drawEnd(e: MouseEvent): void
-  // TODO: define state type
-  abstract draw(e: MouseEvent, state: { width: number; color: string }): void
+  abstract draw(e: MouseEvent, options: Options): void
 }

@@ -1,4 +1,4 @@
-import { Instrument } from './base'
+import { Instrument, Options } from './base'
 
 export class Pen implements Instrument {
   ctx
@@ -7,19 +7,19 @@ export class Pen implements Instrument {
     this.ctx = ctx
   }
 
-  drawStart(e: MouseEvent, state: { width: number; color: string }) {
+  drawStart(e: MouseEvent, options: Options) {
     this.ctx.beginPath()
-    this.draw(e, state)
+    this.draw(e, options)
   }
 
   drawEnd() {
     this.ctx.closePath()
   }
 
-  draw(e: MouseEvent, state: { width: number; color: string }) {
+  draw(e: MouseEvent, options: Options) {
     this.ctx.lineCap = 'round'
-    this.ctx.lineWidth = state.width
-    this.ctx.strokeStyle = state.color
+    this.ctx.lineWidth = options.width
+    this.ctx.strokeStyle = options.color
     this.ctx.lineJoin = 'round'
 
     console.log('drawing')
