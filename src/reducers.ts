@@ -1,5 +1,6 @@
 import {WBState, WIDTH} from './app'
 import {Eraser, Highlighter, Pen} from './instruments'
+import {SingleStroke} from './instruments/uni-stroke-hoc'
 
 export const changeInstrument = (type: 'Pen' | 'Highlight' | 'Eraser') => (
   _e: Event,
@@ -9,7 +10,7 @@ export const changeInstrument = (type: 'Pen' | 'Highlight' | 'Eraser') => (
     type === 'Pen'
       ? new Pen(state.context)
       : type === 'Highlight'
-      ? new Highlighter(state.context)
+      ? new SingleStroke(state.canvasRef, new Highlighter(state.context))
       : new Eraser(state.context)
 
   const colors = instrument.getSupportedColors

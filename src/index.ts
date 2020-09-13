@@ -16,7 +16,7 @@ window.onload = () => {
 
   const context = canvas.getContext('2d')
   if (context && app) {
-    let state: WBState = initApp(context)
+    let state: WBState = initApp(context, canvas)
 
     /** Receives actions from DOM and updates state for tools */
     const dispatch = (reducer: Reducer<WBState>) => (e: Event) => {

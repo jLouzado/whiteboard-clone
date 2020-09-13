@@ -11,17 +11,22 @@ export type WBState = {
   /** width in pixels */
   width: WIDTH
   color: string
+  canvasRef: HTMLCanvasElement
   context: CanvasRenderingContext2D
   instrument: Instrument
 }
 
-export const initApp = (ctx: CanvasRenderingContext2D): WBState => {
+export const initApp = (
+  ctx: CanvasRenderingContext2D,
+  canvas: HTMLCanvasElement
+): WBState => {
   const instrument = new Pen(ctx)
 
   return {
     drawing: false,
     width: 5,
     color: instrument.getSupportedColors[0],
+    canvasRef: canvas,
     context: ctx,
     instrument
   }

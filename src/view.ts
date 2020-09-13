@@ -11,6 +11,7 @@ const instruments: ['Pen', 'Highlight', 'Eraser'] = [
 export const view = (dispatch: Dispatcher<WBState>, state: WBState) => {
   const colors = state.instrument.getSupportedColors
 
+  // TODO(refactor): assert on this id, since it's needed for layout
   return h('div#tools', [
     ...instruments.map((i) =>
       h(
@@ -36,9 +37,8 @@ export const view = (dispatch: Dispatcher<WBState>, state: WBState) => {
       )
     ),
     ...(colors
-      ? colors.map((color, index) => {
-          console.log(color)
-          return h(
+      ? colors.map((color, index) =>
+          h(
             'button.color',
             {
               on: {
@@ -47,7 +47,7 @@ export const view = (dispatch: Dispatcher<WBState>, state: WBState) => {
             },
             [color]
           )
-        })
+        )
       : [''])
   ])
 }
