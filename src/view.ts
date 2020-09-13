@@ -1,4 +1,5 @@
 import {h} from 'snabbdom/build/package/h'
+import {VNode} from 'snabbdom/build/package/vnode'
 import {Dispatcher, WBState, WIDTH} from './app'
 import {changeColor, changeInstrument, changeSize} from './reducers'
 
@@ -8,45 +9,36 @@ const instruments: ['Pen', 'Highlight', 'Eraser'] = [
   'Eraser'
 ]
 
+const hButton = (
+  handleClick: EventListener,
+  child: string | number | VNode,
+  key: string
+) =>
+  h(
+    'button',
+    {
+      key,
+      on: {
+        click: handleClick
+      }
+    },
+    [child]
+  )
+
 export const view = (dispatch: Dispatcher<WBState>, state: WBState) => {
   const colors = state.instrument.getSupportedColors
 
   // TODO(refactor): assert on this id, since it's needed for layout
   return h('div#tools', [
     ...instruments.map((i) =>
-      h(
-        'button.ins',
-        {
-          key: i,
-          on: {
-            click: dispatch(changeInstrument(i))
-          }
-        },
-        [i]
-      )
+      hButton(dispatch(changeInstrument(i)), i, `ins-${i}`)
     ),
     ...[WIDTH.SMALL, WIDTH.MEDIUM, WIDTH.LARGE].map((width) =>
-      h(
-        'button.size',
-        {
-          on: {
-            click: dispatch(changeSize(width))
-          }
-        },
-        [width]
-      )
+      hButton(dispatch(changeSize(width)), width, `size-${width}`)
     ),
     ...(colors
-      ? colors.map((color, index) =>
-          h(
-            'button.color',
-            {
-              on: {
-                click: dispatch(changeColor(color))
-              }
-            },
-            [color]
-          )
+      ? colors.map((color) =>
+          hButton(dispatch(changeColor(color)), color, `col-${color}`)
         )
       : [''])
   ])
