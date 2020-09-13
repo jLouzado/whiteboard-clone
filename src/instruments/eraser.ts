@@ -31,4 +31,6 @@ export class Eraser implements Instrument {
     this.ctx.beginPath()
     this.ctx.moveTo(e.clientX, e.clientY)
   }
+
+  getSupportedColors = null
 }

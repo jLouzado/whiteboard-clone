@@ -1,4 +1,4 @@
-import {Instrument, Options} from './base'
+import {colors, Instrument, Options} from './base'
 
 export class Pen implements Instrument {
   ctx
@@ -6,6 +6,8 @@ export class Pen implements Instrument {
   constructor(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx
   }
+
+  getSupportedColors = colors.map((rgb) => `rgb(${rgb.join(',')})`)
 
   drawStart(e: MouseEvent, options: Options) {
     this.draw(e, options)

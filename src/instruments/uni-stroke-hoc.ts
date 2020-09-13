@@ -32,4 +32,8 @@ export class SingleStroke implements Instrument {
   draw(e: MouseEvent, options: Options) {
     this.im.draw(e, options)
   }
+
+  get getSupportedColors() {
+    return this.im.getSupportedColors
+  }
 }

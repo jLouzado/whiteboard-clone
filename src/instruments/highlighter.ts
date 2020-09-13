@@ -1,4 +1,4 @@
-import {Instrument, Options} from './base'
+import {colors, Instrument, Options} from './base'
 
 export class Highlighter implements Instrument {
   private ctx
@@ -6,6 +6,8 @@ export class Highlighter implements Instrument {
   constructor(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx
   }
+
+  getSupportedColors = colors.map((rgb) => `rgba(${rgb.join(',')}, 0.5)`)
 
   drawStart(e: MouseEvent, options: Options) {
     this.ctx.save()
@@ -22,7 +24,7 @@ export class Highlighter implements Instrument {
     this.ctx.lineCap = 'round'
     this.ctx.lineJoin = 'round'
     this.ctx.lineWidth = options.width
-    this.ctx.strokeStyle = '#ff0'
+    this.ctx.strokeStyle = options.color
 
     this.ctx.lineTo(e.clientX, e.clientY)
     this.ctx.stroke()
