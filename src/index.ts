@@ -36,10 +36,14 @@ const drawing = (context: CanvasRenderingContext2D) => (e: MouseEvent) => {
   context.lineCap = 'round'
   context.lineWidth = state.width
   context.strokeStyle = state.color
+  context.lineJoin = 'round'
 
   console.log('drawing')
   context.lineTo(e.clientX, e.clientY)
   context.stroke()
+  // smoothen out the line
+  context.beginPath()
+  context.moveTo(e.clientX, e.clientY)
 }
 
 window.onload = () => {
