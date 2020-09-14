@@ -20,7 +20,7 @@ export class Highlighter implements Instrument {
   }
 
   draw(e: MouseEvent, options: Options) {
-    this.ctx.globalCompositeOperation = 'multiply'
+    this.ctx.globalCompositeOperation = 'overlay'
     this.ctx.lineCap = 'round'
     this.ctx.lineJoin = 'round'
     this.ctx.lineWidth = options.width
