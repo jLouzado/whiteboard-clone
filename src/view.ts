@@ -40,6 +40,9 @@ const styles = stylesheet({
     borderRadius: '50%',
     backgroundColor: 'black'
   },
+  instrumentSelector: {
+    fontSize: '28px'
+  },
   colorSelector: {
     borderRadius: '4px',
     height: '20px',
@@ -80,11 +83,23 @@ export const view = (dispatch: Dispatcher<WBState>, state: WBState) => {
   // TODO(refactor): assert on this id, since it's needed for layout
   return h('div#tools', {class: {[styles.container]: true}}, [
     ...instruments.map((i) =>
-      hButton(dispatch(changeInstrument(i)), i, {
-        key: `ins-${i}`,
-        title: `Activate ${i}`,
-        isSelected: i === state.activeInstrument
-      })
+      hButton(
+        dispatch(changeInstrument(i)),
+        h(
+          'div',
+          {
+            class: {
+              [styles.instrumentSelector]: true
+            }
+          },
+          [i === 'Pen' ? '✏️' : i === 'Highlight' ? '🖍️' : '❌']
+        ),
+        {
+          key: `ins-${i}`,
+          title: `${i} Mode`,
+          isSelected: i === state.activeInstrument
+        }
+      )
     ),
     ...[WIDTH.SMALL, WIDTH.MEDIUM, WIDTH.LARGE].map((width) =>
       hButton(
